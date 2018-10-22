@@ -15,6 +15,7 @@ static WEBP_INLINE uint32_t GetBE32(const uint8_t buf[]) {
   return ((uint32_t)buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
 }
 
+// 0x47 --> gif
 WebPInputFileFormat WebPGuessImageType(const uint8_t* const data,
                                        size_t data_size) {
   WebPInputFileFormat format = WEBP_UNSUPPORTED_FORMAT;
@@ -23,6 +24,10 @@ WebPInputFileFormat WebPGuessImageType(const uint8_t* const data,
     const uint32_t magic2 = GetBE32(data + 8);
     if (magic1 == 0x89504E47U) {
       format = WEBP_PNG_FORMAT;
+    } else if (((magic1 >> 24) & 0xff) == 0x47) { // bit action
+        format = WEBP_GIF_FORMAT;
+    } else if ((uint8_t)magic1 == 0x47) { // type uint32_t to uint8_t
+        format = WEBP_GIF_FORMAT;
     } else if (magic1 >= 0xFFD8FF00U && magic1 <= 0xFFD8FFFFU) {
       format = WEBP_JPEG_FORMAT;
     } else if (magic1 == 0x49492A00 || magic1 == 0x4D4D002A) {

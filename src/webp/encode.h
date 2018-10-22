@@ -16,7 +16,7 @@
 
 #include "./types.h"
 
-#ifdef __cplusplus
+#ifdef __cplusplus // if define CPP file , compile with C 
 extern "C" {
 #endif
 
